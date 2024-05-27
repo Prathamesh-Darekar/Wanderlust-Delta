@@ -1,0 +1,22 @@
+<% layout('./layouts/boilerplate.ejs') %>    <!-- used to link to boilerplate(ejs-mate) -->
+<body>
+    <h3>All Listings</h3>
+    <!-- <form method="get" action="/listings/new"><button type="submit">new</button></form> -->
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2">
+      <% for(listing of allListings){%>
+        <a href="/listings/<%-listing.id %>">
+        <div class="card col">
+            <img src="<%-listing.image%>" class="card-img-top" alt="Listing Image" style="height: 20rem;">
+            <div class="card-img-overlay"></div>
+            <div class="card-body">
+              <p class="card-text">
+                <p><b><%-listing.title%></b></p><br>
+                <p><%- listing.price.toLocaleString("en-IN") %>/Night</p>
+              </p>
+            </div>
+        </div>
+        </a>
+      <% } %>
+    </div>
+    
+</body>

@@ -1,0 +1,36 @@
+<% layout('./layouts/boilerplate.ejs') %>
+
+    <body>
+        <div class="row">
+            <div class="col-8 offset-3">
+                <h2>Listing Detail :</h2>
+            </div>
+            <div class="col-6 mt-3 offset-3" style="height:58vh">
+                <div class="card"  style="height:58vh">
+                    <div class="card"  style="height:58vh">
+                        <img src="<%-data.image%>" class="card-img-top show-img" alt="Listing image"><br><br>
+                        <div class="card-body">
+                            <p class="card-text col-12" style="line-height: 20px;">
+                                <ul style="line-height: 25px;">
+                                    <li><b><%-data.title%></b> </li> 
+                                    <li> <%-data.description%></li> 
+                                    <!-- toLocalestring("en-IN") helps to print number with comma based on a country-->
+                                    <li>&#8377; <%-data.price.toLocaleString("en-IN")%></li> 
+                                    <li><%-data.location%></li> 
+                                    <li><%-data.country%></li>
+                                </ul>               
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row offset-3">
+                <div class="col-1 btn btn-dark"> <a  style="color:white" href="/listings/<%-data._id%>/edit">Edit</a></div>
+                <div class="col-1">
+                    <form action="/listings/<%-data._id%>?_method=DELETE" method="post"><button
+                        type="submit" class="btn btn-dark">Delete</button></form>
+                </div>
+                
+            </div>
+        </div>
+    </body>
