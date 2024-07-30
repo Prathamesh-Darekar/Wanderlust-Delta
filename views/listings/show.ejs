@@ -1,36 +1,104 @@
 <% layout('./layouts/boilerplate.ejs') %>
 
-    <body>
-        <div class="row">
-            <div class="col-8 offset-3">
-                <h2>Listing Detail :</h2>
+<body>
+  <div class="row">
+    <div class="col-8 offset-2 mt-2">
+      <h2><%-data.title%></h2>
+    </div>
+    <div class="col-8 mt-3 offset-2" style="height: 55vh">
+      <div class="card listingCard">
+        <div class="card listingCard">
+          <img
+            src="<%-data.image%>"
+            class="card-img-top show-img"
+            alt="Listing image"
+          />
+          <br />
+          <div class="card-body">
+            <div class="card-text col-12">
+              <ul style="line-height: 25px">
+                <li><%-data.description%></li>
+                <!-- toLocalestring("en-IN") helps to print number with comma based on a country-->
+                <li>&#8377; <%-data.price.toLocaleString("en-IN")%></li>
+                <li><%-data.location%></li>
+                <li><%-data.country%></li>
+              </ul>
             </div>
-            <div class="col-6 mt-3 offset-3" style="height:58vh">
-                <div class="card"  style="height:58vh">
-                    <div class="card"  style="height:58vh">
-                        <img src="<%-data.image%>" class="card-img-top show-img" alt="Listing image"><br><br>
-                        <div class="card-body">
-                            <p class="card-text col-12" style="line-height: 20px;">
-                                <ul style="line-height: 25px;">
-                                    <li><b><%-data.title%></b> </li> 
-                                    <li> <%-data.description%></li> 
-                                    <!-- toLocalestring("en-IN") helps to print number with comma based on a country-->
-                                    <li>&#8377; <%-data.price.toLocaleString("en-IN")%></li> 
-                                    <li><%-data.location%></li> 
-                                    <li><%-data.country%></li>
-                                </ul>               
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row offset-3">
-                <div class="col-1 btn btn-dark"> <a  style="color:white" href="/listings/<%-data._id%>/edit">Edit</a></div>
-                <div class="col-1">
-                    <form action="/listings/<%-data._id%>?_method=DELETE" method="post"><button
-                        type="submit" class="btn btn-dark">Delete</button></form>
-                </div>
-                
-            </div>
+          </div>
         </div>
-    </body>
+      </div>
+    </div>
+    <div class="row col-6 offset-2 mb-2 mt-2" style="z-index: 1">
+      <div class="col-2 btn btn-danger">
+        <a style="color: white" href="/listings/<%-data._id%>/edit">Edit</a>
+      </div>
+      <div class="col-1">
+        <form action="/listings/<%-data._id%>?_method=DELETE" method="post">
+          <button type="submit" class="btn btn-dark">Delete</button>
+        </form>
+      </div>
+    </div>
+    <div class="row col-8 mt-4 offset-2">
+      <hr />
+      <h3>Leave a review</h3>
+      <form
+        action="/listings/<%-data.id%>/review"
+        method="post"
+        style="max-width: 100%"
+        novalidate
+        class="needs-validation mt-1 mb-4"
+      >
+        <div class="mt-2">
+          <label for="rating" class="form-label">Rating</label>
+          <input
+            type="range"
+            id="rating"
+            min="1"
+            max="5"
+            name="review[rating]"
+            class="form-range"
+          />
+        </div>
+        <div class="mt-2">
+          <label for="comment" class="form-label">Comment</label>
+          <textarea
+            name="review[comment]"
+            id="comment"
+            cols="20"
+            rows="4"
+            class="form-control"
+            required
+          ></textarea>
+          <div class="invalid-feedback">
+            Please add some comments for review
+          </div>
+        </div>
+        <button class="btn btn-outline-dark mt-2">Submit</button>
+      </form>
+      <hr />
+    </div>
+    <div class="row">
+      <h3 class="offset-2">All Reviews</h3>
+      <ul class="row col-8 offset-2 justify-content-center">
+        <%if(data.reviews.length==0){%>
+        <p style="text-align: center; color: gray">No review available</p>
+        <% }else{%> <%data.reviews.forEach(review => {%>
+        <!-- <li><%-review.rating%> star , <%-review.comment%></li> -->
+        <div class="card col-5 m-3">
+          <div class="card-body">
+            <p class="card-title">Review</p>
+            <p class="card-text"><%-review.rating%></p>
+            <p class="card-text"><%-review.comment%></p>
+            <form
+              action="/listings/<%-data.id%>/review/<%-review.id%>?_method=DELETE"
+              method="post"
+            >
+              <button class="btn btn-outline-danger btn-sm">Delete</button>
+            </form>
+          </div>
+        </div>
+        <% }); %> <%}%>
+      </ul>
+    </div>
+  </div>
+</body>

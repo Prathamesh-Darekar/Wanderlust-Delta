@@ -5,12 +5,12 @@
     <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2">
       <% for(listing of allListings){%>
         <a href="/listings/<%-listing.id %>">
-        <div class="card col">
+        <div class="card col listingCard">
             <img src="<%-listing.image%>" class="card-img-top" alt="Listing Image" style="height: 20rem;">
             <div class="card-img-overlay"></div>
             <div class="card-body">
-              <p class="card-text">
-                <p><b><%-listing.title%></b></p><br>
+              <p class="card-text m-0">
+                <p class="m-0"><b><%-listing.title%></b></p>
                 <p><%- listing.price.toLocaleString("en-IN") %>/Night</p>
               </p>
             </div>
