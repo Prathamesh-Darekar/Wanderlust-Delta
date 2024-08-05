@@ -5,7 +5,7 @@
     <div class="col-8 offset-2 mt-2">
       <h2><%-data.title%></h2>
     </div>
-    <div class="col-8 mt-3 offset-2" style="height: 55vh">
+    <div class="col-8 mt-3 offset-2">
       <div class="card listingCard">
         <div class="card listingCard">
           <img
@@ -14,21 +14,23 @@
             alt="Listing image"
           />
           <br />
-          <div class="card-body">
-            <div class="card-text col-12">
-              <ul style="line-height: 25px">
-                <li><%-data.description%></li>
-                <!-- toLocalestring("en-IN") helps to print number with comma based on a country-->
-                <li>&#8377; <%-data.price.toLocaleString("en-IN")%></li>
-                <li><%-data.location%></li>
-                <li><%-data.country%></li>
-              </ul>
-            </div>
+          <div class="card-body col-12">
+            <ul>
+              <li>
+                <b><i>Owned by-<%-data.owner.username%></i></b>
+              </li>
+              <li><%-data.description%></li>
+              <!-- toLocalestring("en-IN") helps to print number with comma based on a country-->
+              <li>&#8377; <%-data.price.toLocaleString("en-IN")%></li>
+              <li><%-data.location%></li>
+              <li><%-data.country%></li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
-    <div class="row col-6 offset-2 mb-2 mt-2" style="z-index: 1">
+
+    <div class="row col-6 offset-2 mb-2" style="z-index: 1">
       <div class="col-2 btn btn-danger">
         <a style="color: white" href="/listings/<%-data._id%>/edit">Edit</a>
       </div>
