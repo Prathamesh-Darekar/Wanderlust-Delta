@@ -89,7 +89,7 @@ app.use((req, res, next) => {
 });
 
 //Modularising the routes
-
+app.get("/", (req, res) => res.redirect("/listings"));
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/review", reviewsRouter);
 app.use("/", userRouter);
