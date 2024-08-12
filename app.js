@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -103,9 +106,9 @@ app.use("/listings", listingsRouter);
 app.use("/listings/:id/review", reviewsRouter);
 app.use("/", userRouter);
 
-app.get("/", (req, res) => {
-  res.send("hello");
-});
+// app.get("/", (req, res) => {
+//   res.send("hello");
+// });
 
 // CODE FOR PAGE NOT FOUND
 

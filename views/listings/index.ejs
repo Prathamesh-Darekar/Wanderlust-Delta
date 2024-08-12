@@ -1,22 +1,107 @@
-<% layout('./layouts/boilerplate.ejs') %>    <!-- used to link to boilerplate(ejs-mate) -->
-<body>
-    <h3>All Listings</h3>
-    <!-- <form method="get" action="/listings/new"><button type="submit">new</button></form> -->
-    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2">
-      <% for(listing of allListings){%>
-        <a href="/listings/<%-listing.id %>">
-        <div class="card col listingCard">
-            <img src="<%-listing.image%>" class="card-img-top" alt="Listing Image" style="height: 20rem;">
-            <div class="card-img-overlay"></div>
-            <div class="card-body">
-              <p class="card-text m-0">
-                <p class="m-0"><b><%-listing.title%></b></p>
-                <p><%- listing.price.toLocaleString("en-IN") %>/Night</p>
-              </p>
-            </div>
-        </div>
-        </a>
-      <% } %>
+<% layout('./layouts/boilerplate.ejs') %>
+<!-- used to link to boilerplate(ejs-mate) -->
+<style>
+  .filter {
+    border: none;
+    outline: none;
+    background: #fff;
+  }
+</style>
+<form id="filters" action="/listings/filter">
+  <button class="filter" value="rooms" name="category">
+    <i class="fa-solid fa-bed"></i>
+    <p>Rooms</p>
+  </button>
+  <button class="filter" value="cities" name="category">
+    <i class="fa-solid fa-mountain-city"></i>
+    <p>Iconic Cities</p>
+  </button>
+  <button class="filter" value="scenery" name="category">
+    <i class="fa-solid fa-mountain-sun"></i>
+    <p>Amazing Scenery</p>
+  </button>
+  <button class="filter" value="beaches" name="category">
+    <i class="fa-solid fa-umbrella-beach"></i>
+    <p>Beach Point</p>
+  </button>
+  <button class="filter" value="pools" name="category">
+    <i class="fa-solid fa-person-swimming"></i>
+    <p>Pools</p>
+  </button>
+  <button class="filter" value="cabins" name="category">
+    <i class="fa-solid fa-warehouse"></i>
+    <p>Cabin</p>
+  </button>
+  <button class="filter" value="castles" name="category">
+    <i class="fa-brands fa-fort-awesome"></i>
+    <p>Castles</p>
+  </button>
+  <button class="filter" value="mountains" name="category">
+    <i class="fa-solid fa-mountain"></i>
+    <p>Mountains</p>
+  </button>
+  <button class="filter" value="camps" name="category">
+    <i class="fa-solid fa-campground"></i>
+    <p>Camp</p>
+  </button>
+  <button class="filter" value="farms" name="category">
+    <i class="fa-solid fa-tractor"></i>
+    <p>Farm</p>
+  </button>
+  <button class="filter" value="river" name="category">
+    <i class="fa-solid fa-water"></i>
+    <p>River</p>
+  </button>
+  <div id="tax">
+    <div class="form-switch form-check-reverse">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="flexSwitchCheckDefault"
+      />
+      <label class="form-check-label" for="flexSwitchCheckDefault" id="taxLabel"
+        >Show GST %</label
+      >
     </div>
-    
-</body>
+  </div>
+</form>
+<div
+  class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-2"
+  style="padding: 30px; padding-left: 50px; padding-top: 90px; max-width: 100%"
+>
+  <% for(listing of allListings){%>
+  <a href="/listings/<%-listing.id %>">
+    <div class="card col listingCard">
+      <img
+        src="<%-listing.image.url%>"
+        class="card-img-top"
+        alt="Listing Image"
+        style="height: 20rem"
+      />
+      <div class="card-img-overlay"></div>
+      <div class="card-body">
+        <p class="card-text m-0"></p>
+        <p class="m-0"><b><%-listing.title%></b></p>
+        <p>
+          <%- listing.price.toLocaleString("en-IN") %>/Night&nbsp;<i
+            class="gst"
+            style="display: none"
+            >+18% GST</i
+          >
+        </p>
+      </div>
+    </div>
+  </a>
+  <% } %>
+</div>
+<script>
+  let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+  let gst = document.getElementsByClassName("gst");
+  taxSwitch.addEventListener("click", () => {
+    console.log(gst[0].style);
+    for (ele of gst) {
+      ele.style.display = ele.style.display == "none" ? "inline" : "none";
+    }
+  });
+</script>

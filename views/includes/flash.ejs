@@ -1,7 +1,8 @@
 <%if(success.length>0){%>
 <div
-  class="alert alert-success alert-dismissible fade show col-4 offset-4"
+  class="alert alert-success alert-dismissible fade show col-6 offset-3"
   role="alert"
+  id="toastSuccess"
 >
   <strong><%- success %></strong>
   <button
@@ -13,8 +14,9 @@
 </div>
 <%}%> <%if(error.length>0){%>
 <div
-  class="alert alert-danger alert-dismissible fade show col-4 offset-4"
+  class="alert alert-danger alert-dismissible fade show col-6 offset-3"
   role="alert"
+  id="toastError"
 >
   <strong><%- error %></strong>
   <button
@@ -24,4 +26,18 @@
     aria-label="Close"
   ></button>
 </div>
+<%}%> <%if(success.length>0){%>
+<script>
+  let toast = document.getElementById("toastSuccess");
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 1200);
+</script>
+<%}else if(error.length>0){%>
+<script>
+  let toast2 = document.getElementById("toastError");
+  setTimeout(() => {
+    toast2.style.display = "none";
+  }, 1200);
+</script>
 <%}%>

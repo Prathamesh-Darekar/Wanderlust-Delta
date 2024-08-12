@@ -10,15 +10,8 @@ const listingSchema = new Schema({
   },
   description: String,
   image: {
-    type: String,
-    //set if if image exist but not available ,this is set for frontend
-    // default is when image is undefined (not exist)
-    default:
-      "https://unsplash.com/photos/gray-wooden-sea-dock-near-green-pine-trees-under-white-sky-at-daytime-1EYMue_AwDw",
-    set: (v) =>
-      v === ""
-        ? "https://unsplash.com/photos/gray-wooden-sea-dock-near-green-pine-trees-under-white-sky-at-daytime-1EYMue_AwDw"
-        : v,
+    url: String,
+    filename: String,
   },
   price: Number,
   location: String,
@@ -32,6 +25,14 @@ const listingSchema = new Schema({
   owner: {
     type: Schema.Types.ObjectId,
     ref: "User",
+  },
+  coordinates: {
+    longitude: String,
+    latitude: String,
+  },
+  category: {
+    type: String,
+    required: true,
   },
 });
 

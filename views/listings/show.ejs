@@ -1,37 +1,39 @@
 <% layout('./layouts/boilerplate.ejs') %>
-
-<body>
-  <div class="row">
-    <div class="col-8 offset-2 mt-2">
-      <h2><%-data.title%></h2>
-    </div>
-    <div class="col-8 mt-3 offset-2">
+<script>
+  const latitude = "<%-data.coordinates.latitude%>";
+  const longitude = "<%-data.coordinates.longitude%>";
+</script>
+<div class="col-8 offset-2 mt-2">
+  <h2><%-data.title%></h2>
+</div>
+<div id="wrapperShow">
+  <div class="row col-8 mt-3" id="ShowContainer">
+    <div class="card listingCard">
       <div class="card listingCard">
-        <div class="card listingCard">
-          <img
-            src="<%-data.image%>"
-            class="card-img-top show-img"
-            alt="Listing image"
-          />
-          <br />
-          <div class="card-body col-12">
-            <ul>
-              <li>
-                <b><i>Owned by-<%-data.owner.username%></i></b>
-              </li>
-              <li><%-data.description%></li>
-              <!-- toLocalestring("en-IN") helps to print number with comma based on a country-->
-              <li>&#8377; <%-data.price.toLocaleString("en-IN")%></li>
-              <li><%-data.location%></li>
-              <li><%-data.country%></li>
-            </ul>
-          </div>
+        <img
+          src="<%-data.image.url%>"
+          class="card-img-top show-img shadow"
+          alt="Listing image"
+          style="height: 18rem"
+        />
+        <br />
+        <div class="card-body col-12">
+          <ul>
+            <li>
+              <b><i>Owned by-<%-data.owner.username%></i></b>
+            </li>
+            <li><%-data.description%></li>
+            <!-- toLocalestring("en-IN") helps to print number with comma based on a country-->
+            <li>&#8377; <%-data.price.toLocaleString("en-IN")%></li>
+            <li><%-data.location%></li>
+            <li><%-data.country%></li>
+          </ul>
         </div>
       </div>
     </div>
-
-    <div class="row col-6 offset-2 mb-2" style="z-index: 1">
-      <div class="col-2 btn btn-danger">
+    <%if(currentUser&&data.owner._id.equals(currentUser._id)){%>
+    <div class="row col-10 offset-1 mb-2">
+      <div class="col-2 btn btn-danger p-1">
         <a style="color: white" href="/listings/<%-data._id%>/edit">Edit</a>
       </div>
       <div class="col-1">
@@ -40,8 +42,10 @@
         </form>
       </div>
     </div>
-    <div class="row col-8 mt-4 offset-2">
+    <%}%>
+    <div class="row col-10 mt-4 offset-1">
       <hr />
+      <%if(currentUser){%>
       <h3>Leave a review</h3>
       <form
         action="/listings/<%-data.id%>/review"
@@ -52,23 +56,61 @@
       >
         <div class="mt-2">
           <label for="rating" class="form-label">Rating</label>
-          <input
-            type="range"
-            id="rating"
-            min="1"
-            max="5"
-            name="review[rating]"
-            class="form-range"
-          />
+          <fieldset class="starability-slot">
+            <input
+              type="radio"
+              id="no-rate"
+              class="input-no-rate"
+              name="review[rating]"
+              value="1"
+              checked
+              aria-label="No rating."
+            />
+            <input
+              type="radio"
+              id="first-rate1"
+              name="review[rating]"
+              value="1"
+            />
+            <label for="first-rate1" title="Terrible"></label>
+            <input
+              type="radio"
+              id="first-rate2"
+              name="review[rating]"
+              value="2"
+            />
+            <label for="first-rate2" title="Not good"></label>
+            <input
+              type="radio"
+              id="first-rate3"
+              name="review[rating]"
+              value="3"
+            />
+            <label for="first-rate3" title="Average"></label>
+            <input
+              type="radio"
+              id="first-rate4"
+              name="review[rating]"
+              value="4"
+            />
+            <label for="first-rate4" title="Very good"></label>
+            <input
+              type="radio"
+              id="first-rate5"
+              name="review[rating]"
+              value="5"
+            />
+            <label for="first-rate5" title="Amazing"></label>
+          </fieldset>
         </div>
-        <div class="mt-2">
+        <div>
           <label for="comment" class="form-label">Comment</label>
           <textarea
             name="review[comment]"
             id="comment"
             cols="20"
             rows="4"
-            class="form-control"
+            class="form-control shadow-sm"
             required
           ></textarea>
           <div class="invalid-feedback">
@@ -78,18 +120,26 @@
         <button class="btn btn-outline-dark mt-2">Submit</button>
       </form>
       <hr />
+      <%}%>
     </div>
-    <div class="row">
-      <h3 class="offset-2">All Reviews</h3>
-      <ul class="row col-8 offset-2 justify-content-center">
+    <div class="row col-10 m-3" id="map-container">
+      <h3 class="offfset-0 col-10">Map</h3>
+      <!-- FOR RENDERING MAP(map is rendered using DOM/JS in map.js file) -->
+    </div>
+    <div class="row col-10 mt-4 offset-1">
+      <hr />
+      <ul class="row col-12">
+        <h3 class="col-12">All Reviews</h3>
         <%if(data.reviews.length==0){%>
         <p style="text-align: center; color: gray">No review available</p>
         <% }else{%> <%data.reviews.forEach(review => {%>
-        <!-- <li><%-review.rating%> star , <%-review.comment%></li> -->
-        <div class="card col-5 m-3">
+        <div class="card col-5 shadow m-3" id="reviewCard">
           <div class="card-body">
-            <p class="card-title">Review</p>
-            <p class="card-text"><%-review.rating%></p>
+            <p class="card-title"><b>@<%-review.author.username%></b></p>
+            <p
+              class="starability-result card-text"
+              data-rating="<%-review.rating%>"
+            ></p>
             <p class="card-text"><%-review.comment%></p>
             <form
               action="/listings/<%-data.id%>/review/<%-review.id%>?_method=DELETE"
@@ -103,4 +153,5 @@
       </ul>
     </div>
   </div>
-</body>
+</div>
+<script src="/js/map.js"></script>
