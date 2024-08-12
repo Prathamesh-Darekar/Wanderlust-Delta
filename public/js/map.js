@@ -15,5 +15,3 @@ const marker = new maplibregl.Marker({
 })
   .setLngLat([longitude, latitude])
   .addTo(map);
-console.log(longitude);
-console.log(latitude);

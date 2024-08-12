@@ -13,6 +13,7 @@ const listingsRouter = require("./routes/listing.js"); // CONTAINS ALL ROUTES RE
 const userRouter = require("./routes/user.js"); // CONTAINS ALL ROUTES RELATED TO USER
 
 const session = require("express-session");
+const MongoStore = require("connect-mongo"); // MONGO SESSION
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStratergy = require("passport-local");
@@ -25,8 +26,39 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
+//CONNECTING SERVER TO DATABASE
+
+const MONGO_URL = process.env.ATLASDB_URL;
+
+main()
+  .then(() => {
+    console.log("DATABASE CONNECTED");
+  })
+  .catch((err) => console.log(err));
+
+async function main() {
+  await mongoose.connect(MONGO_URL);
+}
+
+app.listen(3000, () => {
+  console.log("Server Online");
+});
+
+const store = MongoStore.create({
+  mongoUrl: MONGO_URL,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", (err) => {
+  console.log("Error in mongo session store", err);
+});
+
 const sessionOptions = {
-  secret: "mysupersecretcode",
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -47,39 +79,6 @@ passport.use(new localStratergy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-//CONNECTING SERVER TO DATABASE
-
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
-
-main()
-  .then(() => {
-    console.log("DATABASE CONNECTED");
-  })
-  .catch((err) => console.log(err));
-
-async function main() {
-  await mongoose.connect(MONGO_URL);
-}
-
-app.listen(3000, () => {
-  console.log("Server Online");
-});
-
-// TEST API
-
-// app.get("/testlisting", async (req, res) => {
-//   let samplelisting = new Listing({
-//     title: "My new Villa",
-//     description: "By the brach",
-//     price: 1500,
-//     location: "Goa",
-//     country: "India",
-//   });
-//   await samplelisting.save();
-//   console.log("listing saved");
-//   res.send("Success");
-// });
-
 // STORING FLASH INTO LOCALS
 
 app.use((req, res, next) => {
@@ -89,26 +88,11 @@ app.use((req, res, next) => {
   next();
 });
 
-//ADDING DEMO USER
-
-// app.get("/demouser", async (req, res) => {
-//   const fakeUser = new User({
-//     email: "fake@getMaxListeners.com",
-//     username: "fake-user",
-//   });
-//   let registeredUser = await User.register(fakeUser, "helloWorld"); // BUILT IN METHOD USED TO STORE USER INTO THE DATABASE WITH GIVEN PASSWORD AND ALSO CHECK WHETHER USERNAME IS UNIQUE OR NOT
-//   res.send(registeredUser);
-// });
-
 //Modularising the routes
 
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/review", reviewsRouter);
 app.use("/", userRouter);
-
-// app.get("/", (req, res) => {
-//   res.send("hello");
-// });
 
 // CODE FOR PAGE NOT FOUND
 

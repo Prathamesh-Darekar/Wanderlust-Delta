@@ -141,12 +141,14 @@
               data-rating="<%-review.rating%>"
             ></p>
             <p class="card-text"><%-review.comment%></p>
+            <%if(currentUser){%>
             <form
               action="/listings/<%-data.id%>/review/<%-review.id%>?_method=DELETE"
               method="post"
             >
               <button class="btn btn-outline-danger btn-sm">Delete</button>
             </form>
+            <%}%>
           </div>
         </div>
         <% }); %> <%}%>
